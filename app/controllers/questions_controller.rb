@@ -1,4 +1,6 @@
 class QuestionsController < ApplicationController
+  before_action :load_question, only: [:show, :edit]
+
   def index
     @questions = Question.all
   end
@@ -12,6 +14,9 @@ class QuestionsController < ApplicationController
   end
 
   def edit
+  end
+
+  def load_question
     @question = Question.find(params[:id])
   end
 end
