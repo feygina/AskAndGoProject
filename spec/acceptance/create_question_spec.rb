@@ -5,7 +5,7 @@ In order to get answer from community
 As an authenticated user
 I want to be able to ask the question
 } do
-  given(:user) { create(:user) }
+  given(:user) { FactoryGirl.create(:user) }
   scenario 'Authenticated user create the question' do
     sign_in(user)
     visit '/questions'
