@@ -1,18 +1,25 @@
 require 'rails_helper'
 
-RSpec.describe AnswersController, :type => :controller do
-
-  describe 'GET #index' do
-    let(:answers) { FactoryGirl.create_list(:answer, 2) }
-
-    before { get :index }
-
-    it 'populates an array of all questions' do
-      expect(assigns(:questions)).to match_array(@questions)
+describe AnswersController do
+  describe 'POST #create' do
+    let(:question) { FactoryGirl.create :question }
+    context 'with valid attributes' do
+      it 'saves the new answer in the database' do
+        expect { post :create, answer: FactoryGirl.attributes_for(:answer), question_id: question, format: :js }.to change(question.answers, :count).by(1)
+      end
+      it 'render create template' do
+        post :create, answer: FactoryGirl.attributes_for(:answer), question_id: question, format: :js
+        expect(response).to render_template :create
+      end
     end
-
-    it 'renders index view' do
-      expect(response).to render_template :index
+    context 'with invalid attributes' do
+      it 'does not save the question' do
+        expect { post :create, answer: FactoryGirl.attributes_for(:invalid_answer), question_id: question, format: :js }.to_not change(Answer, :count)
+      end
+      it 'render crate template' do
+        post :create, answer: FactoryGirl.attributes_for(:invalid_answer), question_id: question, format: :js
+        expect(response).to render_template :create
+      end
     end
   end
 end
